@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qrcodepay.ai/specs/audit-record.schema.json",
+  "title": "QRCodePay Audit Record",
+  "description": "Audit Record v0.2 - an on-chain-anchorable set of hashes and status references that bind one Payment Intent and per-payment confirmation to a reusable Payment Mandate, contract payment proof, Provider execution evidence, and refund state where applicable. Stores hashes and status references, never plaintext order, merchant, or PAYER contact content.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "payment_intent_hash",
+    "order_hash",
+    "merchant_hash",
+    "mandate_hash",
+    "confirmation_hash",
+    "transfer_tx_hash",
+    "provider_receipt_hash",
+    "status_timestamp",
+    "status"
+  ],
+  "properties": {
+    "payment_intent_hash": {
+      "type": "string",
+      "description": "Keccak-256 hash of the canonical Payment Intent for this concrete payment.",
+      "pattern": "^0x[a-fA-F0-9]{64}$"
+    },
+    "order_hash": {
+      "type": "string",
+      "description": "Keccak-256 hash of the canonical order content for this concrete payment.",
+      "pattern": "^0x[a-fA-F0-9]{64}$"
+    },
+    "merchant_hash": {
+      "type": "string",
+      "description": "Salted keccak-256 hash of the merchant identity for this concrete payment. Verifiable through selective disclosure without public enumeration.",
+      "pattern": "^0x[a-fA-F0-9]{64}$"
+    },
+    "mandate_hash": {
+      "type": "string",
+      "description": "Hash of the reusable canonical Payment Mandate used to authorize this payment.",
+      "pattern": "^0x[a-fA-F0-9]{64}$"
+    },
+    "confirmation_hash": {
+      "type": "string",
+      "description": "Hash of the PAYER or wallet-policy confirmation that binds this Payment Intent to one mandate usage.",
+      "pattern": "^0x[a-fA-F0-9]{64}$"
+    },
+    "transfer_tx_hash": {
+      "type": "string",
+      "description": "Transaction hash of the supported digital-asset transfer or contract payment that funded the payment.",
+      "pattern": "^0x[a-fA-F0-9]{64}$"
+    },
+    "provider_receipt_hash": {
+      "type": "string",
+      "description": "Keccak-256 hash of the Provider receipt for the executed last-mile payment. Binds Provider execution evidence to the concrete Payment Intent and mandate usage.",
+      "pattern": "^0x[a-fA-F0-9]{64}$"
+    },
+    "refund_claim_id": {
+      "type": "string",
+      "description": "Optional internal refund claim identifier used when contract payment was received and a PAYER-verified refund flow is required. This is not a payment authorization.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "refund_tx_hash": {
+      "type": ["string", "null"],
+      "description": "Optional transaction hash for an executed refund. Must be unique when present and should be linked to the verified PAYER refund address by off-chain records.",
+      "pattern": "^0x[a-fA-F0-9]{64}$"
+    },
+    "refund_status_timestamp": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Optional RFC 3339 / ISO 8601 UTC timestamp for the latest refund-specific status transition."
+    },
+    "status_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 / ISO 8601 UTC timestamp at which the recorded status was set.",
+      "examples": ["2026-07-01T10:21:42Z"]
+    },
+    "status": {
+      "type": "string",
+      "description": "Lifecycle status of the payment at status_timestamp.",
+      "enum": [
+        "created",
+        "mandate_pending",
+        "mandate_authorized",
+        "contract_payment_pending",
+        "contract_payment_confirmed",
+        "provider_pending",
+        "provider_executing",
+        "completed",
+        "payment_failed",
+        "refund_claim_requested",
+        "refund_email_sent",
+        "refund_review_pending",
+        "refund_processing",
+        "refunded",
+        "refund_failed",
+        "expired",
+        "cancelled",
+        "failed_without_payment",
+        "manual_terminal"
+      ],
+      "examples": ["completed"]
+    }
+  }
+}

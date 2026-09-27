@@ -1,0 +1,16 @@
+{
+  "refund_claim_id": "rfc_2026_000001",
+  "payment_intent_hash": "0x1111111111111111111111111111111111111111111111111111111111111111",
+  "order_hash": "0x2222222222222222222222222222222222222222222222222222222222222222",
+  "merchant_id": "merchant_demo_001",
+  "payer_email_hash": "sha256:demo_hash_only_not_real_email",
+  "refund_asset": "USDC",
+  "chain_id": "eip155:8453",
+  "refund_amount": "25.00",
+  "status": "refund_email_sent",
+  "refund_wallet_address": null,
+  "refund_tx_hash": null,
+  "created_at": "2026-01-01T00:00:00Z",
+  "verified_at": null,
+  "completed_at": null
+}

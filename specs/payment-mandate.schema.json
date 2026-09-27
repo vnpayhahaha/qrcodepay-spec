@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qrcodepay.ai/specs/payment-mandate.schema.json",
+  "title": "QRCodePay Payment Mandate",
+  "description": "Payment Mandate v0.2 - reusable wallet-level bounded authorization that limits what an AI Agent, application, merchant, or other grantee may request. The mandate is not inherently bound to one Payment Intent or order. Each concrete payment requires a separate confirmation and mandate usage. mandate_hash is derived from the canonical Payment Mandate and is not part of this object.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mandate_version",
+    "payer",
+    "grantee_type",
+    "grantee_id",
+    "chain_id",
+    "asset",
+    "confirmation_mode",
+    "single_limit",
+    "total_limit",
+    "usage_limit",
+    "valid_from",
+    "expires_at",
+    "authorization_nonce",
+    "revocable"
+  ],
+  "properties": {
+    "mandate_version": {
+      "type": "string",
+      "const": "0.2",
+      "description": "Specification version used by signers and verifiers to select the canonical typed-data definition."
+    },
+    "payer": {
+      "type": "string",
+      "description": "Address of the PAYER wallet or smart account authorizing the mandate. The initial EVM-compatible profile uses a 0x-prefixed 20-byte address.",
+      "pattern": "^0x[a-fA-F0-9]{40}$"
+    },
+    "grantee_type": {
+      "type": "string",
+      "description": "Type of party allowed to request payments under this mandate, for example agent, application, or merchant.",
+      "pattern": "^[a-z][a-z0-9_-]{0,31}$"
+    },
+    "grantee_id": {
+      "type": "string",
+      "description": "Stable opaque identifier or hash for the authorized grantee. Plaintext sensitive identity should not be placed on-chain.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "chain_id": {
+      "type": "string",
+      "description": "CAIP-2 chain identifier for the authorized digital-asset payment path.",
+      "pattern": "^[a-z0-9]{3,8}:[a-zA-Z0-9._-]{1,64}$",
+      "examples": ["eip155:8453"]
+    },
+    "asset": {
+      "type": "string",
+      "description": "Supported digital asset authorized by the PAYER. A schema example does not claim live support for that asset.",
+      "minLength": 1,
+      "maxLength": 32,
+      "examples": ["USDC"]
+    },
+    "confirmation_mode": {
+      "type": "string",
+      "description": "Confirmation policy applied to every concrete payment. v0.2 defines confirm_each only.",
+      "enum": ["confirm_each"]
+    },
+    "single_limit": {
+      "type": "string",
+      "description": "Maximum amount allowed for one confirmed payment, expressed as a decimal string.",
+      "pattern": "^[0-9]+(\\.[0-9]+)?$"
+    },
+    "total_limit": {
+      "type": "string",
+      "description": "Maximum cumulative amount allowed across all mandate usages, expressed as a decimal string. It must not be lower than single_limit.",
+      "pattern": "^[0-9]+(\\.[0-9]+)?$"
+    },
+    "usage_limit": {
+      "type": "integer",
+      "description": "Maximum number of separately confirmed payments allowed under this mandate. A value of 1 represents single-use authorization.",
+      "minimum": 1,
+      "maximum": 100000
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 UTC timestamp from which the mandate may be used."
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 UTC timestamp after which no new mandate usage may be confirmed."
+    },
+    "authorization_nonce": {
+      "type": "string",
+      "description": "Unique value for mandate authorization. A PAYER wallet must not reuse the same nonce for different canonical mandate content.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "revocable": {
+      "type": "boolean",
+      "description": "Whether the PAYER may revoke the mandate before further usage. Verifiers must honor recorded revocation."
+    },
+    "scope": {
+      "type": "object",
+      "description": "Optional additional restrictions. These fields constrain and never expand the required wallet-level authorization.",
+      "additionalProperties": false,
+      "properties": {
+        "allowed_countries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "allowed_gate_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "allowed_provider_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

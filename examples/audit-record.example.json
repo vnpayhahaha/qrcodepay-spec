@@ -1,0 +1,11 @@
+{
+  "payment_intent_hash": "0x9d1e3a5c7f9b1d3f5a7c9e1b3d5f7a9c1e3b5d7f9a1c3e5b7d9f1a3c5e7b9d1f",
+  "order_hash": "0x6a42c8e0f2a4c6e8b0d2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e4b6d8f0a2c4e6",
+  "merchant_hash": "0x8f33b5d7f9a1c3e5b7d9f1a3c5e7b9d1f3a5c7e9b1d3f5a7c9e1b3d5f7a9c1e3",
+  "mandate_hash": "0xc7b9d1f3a5c7e9b1d3f5a7c9e1b3d5f7a9c1e3b5d7f9a1c3e5b7d9f1a3c5e7b9",
+  "confirmation_hash": "0xd8c0e2f4a6b8d0f2a4c6e8b0d2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e4b6d8f0",
+  "transfer_tx_hash": "0x4a18c0e2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e4b6d8f0a2c4e6b8d0f2a4c6e8",
+  "provider_receipt_hash": "0x2bc0e2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e4b6d8f0a2c4e6b8d0f2a4c6e8b0",
+  "status_timestamp": "2026-07-01T10:21:42Z",
+  "status": "completed"
+}
